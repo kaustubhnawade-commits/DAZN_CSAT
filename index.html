@@ -10,13 +10,13 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+ 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f5f5f5;
             padding: 20px;
         }
-
+ 
         .container {
             max-width: 400px;
             margin: 0 auto;
@@ -25,7 +25,7 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-
+ 
         .header {
             background-color: #3d3d3d;
             color: white;
@@ -34,7 +34,7 @@
             align-items: center;
             gap: 12px;
         }
-
+ 
         .avatar {
             width: 40px;
             height: 40px;
@@ -45,42 +45,42 @@
             justify-content: center;
             font-size: 20px;
         }
-
+ 
         .header-text h2 {
             font-size: 16px;
             color: #ffd700;
             margin-bottom: 2px;
         }
-
+ 
         .header-text p {
             font-size: 13px;
             color: #e0e0e0;
         }
-
+ 
         .content {
             padding: 30px 20px;
         }
-
+ 
         h1 {
             font-size: 20px;
             font-weight: 500;
             margin-bottom: 20px;
             color: #333;
         }
-
+ 
         .description {
             font-size: 14px;
             color: #666;
             margin-bottom: 20px;
         }
-
+ 
         .rating-options {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 25px;
         }
-
+ 
         .rating-option {
             display: flex;
             align-items: center;
@@ -91,39 +91,39 @@
             transition: all 0.2s;
             background-color: white;
         }
-
+ 
         .rating-option:hover:not(.disabled) {
             border-color: #1976d2;
             background-color: #f8f9fa;
         }
-
+ 
         .rating-option.selected {
             border-color: #1976d2;
             background-color: #1976d2;
             color: white;
         }
-
+ 
         .rating-option.disabled {
             cursor: not-allowed;
             opacity: 0.6;
         }
-
+ 
         .emoji {
             font-size: 28px;
             margin-right: 15px;
             min-width: 35px;
             text-align: center;
         }
-
+ 
         .rating-label {
             font-size: 15px;
             font-weight: 500;
         }
-
+ 
         .feedback-section {
             margin-bottom: 25px;
         }
-
+ 
         .feedback-label {
             font-size: 14px;
             font-weight: 600;
@@ -131,7 +131,7 @@
             margin-bottom: 10px;
             display: block;
         }
-
+ 
         textarea {
             width: 100%;
             min-height: 100px;
@@ -143,17 +143,17 @@
             resize: vertical;
             transition: border-color 0.2s;
         }
-
+ 
         textarea:focus {
             outline: none;
             border-color: #1976d2;
         }
-
+ 
         textarea:disabled {
             background-color: #f5f5f5;
             cursor: not-allowed;
         }
-
+ 
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -166,16 +166,16 @@
             cursor: pointer;
             transition: background-color 0.2s;
         }
-
+ 
         .submit-btn:hover:not(:disabled) {
             background-color: #1565c0;
         }
-
+ 
         .submit-btn:disabled {
             background-color: #bdbdbd;
             cursor: not-allowed;
         }
-
+ 
         .success-message {
             display: none;
             background-color: #4caf50;
@@ -186,11 +186,11 @@
             text-align: center;
             font-size: 14px;
         }
-
+ 
         .success-message.show {
             display: block;
         }
-
+ 
         .timestamp {
             text-align: center;
             color: #999;
@@ -205,7 +205,7 @@
         <div class="content">
             <h1>Share your feedback with us</h1>
             <p class="description">We would love your feedback on our service</p>
-
+ 
             <div class="rating-options">
                 <div class="rating-option" data-rating="good">
                     <span class="emoji">😊</span>
@@ -220,46 +220,46 @@
                     <span class="rating-label">Poor</span>
                 </div>
             </div>
-
+ 
             <div class="feedback-section">
                 <label class="feedback-label" for="feedbackText">What could we have done better?</label>
                 <textarea id="feedbackText" placeholder=""></textarea>
             </div>
-
+ 
             <button class="submit-btn" id="submitBtn">Submit feedback</button>
-
+ 
             <div class="success-message" id="successMessage">
                 Feedback submitted successfully!
             </div>
         </div>
     </div>
-
+ 
     <script>
         // Configuration - Yellow.ai API endpoint
         const API_ENDPOINT = 'https://r5.cloud.yellow.ai/integrations/sendevent/sendFeedbackToBot/x1750679463696';
         const API_AUTH_TOKEN = 'wfsN7V7wYBNEfRdepa_74SN6HNTMdt8i4VFh8X1n';
-
+ 
         // State management
         let selectedRating = null;
         let isSubmitted = false;
-
+ 
         // DOM elements
         const ratingOptions = document.querySelectorAll('.rating-option');
         const feedbackText = document.getElementById('feedbackText');
         const submitBtn = document.getElementById('submitBtn');
         const successMessage = document.getElementById('successMessage');
-
+ 
         // Helper function to get URL parameters
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
         }
-
+ 
         // Rating selection handler
         ratingOptions.forEach(option => {
             option.addEventListener('click', function() {
                 if (isSubmitted) return;
-
+ 
                 // Remove selected class from all options
                 ratingOptions.forEach(opt => opt.classList.remove('selected'));
                 
@@ -270,42 +270,32 @@
                 selectedRating = this.dataset.rating;
             });
         });
-
+ 
         // Submit handler
         submitBtn.addEventListener('click', async function() {
             if (isSubmitted) return;
-
-            // Validate that a rating is selected
+ 
+            // Validate that a rating is selected — silently do nothing if not
             if (!selectedRating) {
-                alert('Please select a rating before submitting.');
+                console.warn('Submit attempted without a rating selected.');
                 return;
             }
-
+ 
             // Get dynamic values from URL parameters or use defaults
             const sender = getUrlParameter('sender') || 'anonymous';
-            const ticketId = getUrlParameter('ticketId') || '';
-            const phoneNumber = getUrlParameter('phoneNumber') || '';
-            const pdfUrl = getUrlParameter('pdfUrl') || '';
-            const attachmentArray = getUrlParameter('attachmentArray') || '';
             const userLanguage = getUrlParameter('userLanguage') || 'en';
             const source = getUrlParameter('source') || 'feedback_form';
-
+ 
             // Prepare data to send to Yellow.ai API
             const feedbackData = {
                 sender: sender,
                 data: {
-                    ticketId: ticketId,
-                    zendeskTicketPhoneNo: phoneNumber,
-                    pdfUrl: pdfUrl,
-                    attachment: attachmentArray,
                     userLanguage: userLanguage,
-                    // Additional feedback data
                     rating: selectedRating,
-                    comment: feedbackText.value.trim(),
-                    timestamp: new Date().toISOString()
+                    comment: feedbackText.value.trim()
                 }
             };
-
+ 
             try {
                 // Disable form elements
                 isSubmitted = true;
@@ -313,7 +303,7 @@
                 submitBtn.textContent = 'Submitting...';
                 feedbackText.disabled = true;
                 ratingOptions.forEach(opt => opt.classList.add('disabled'));
-
+ 
                 // Send data to Yellow.ai endpoint
                 const response = await fetch(API_ENDPOINT + '?source=' + encodeURIComponent(source), {
                     method: 'POST',
@@ -323,7 +313,7 @@
                     },
                     body: JSON.stringify(feedbackData)
                 });
-
+ 
                 if (response.ok) {
                     // Show success message
                     successMessage.classList.add('show');
@@ -342,11 +332,9 @@
                 submitBtn.textContent = 'Submit feedback';
                 feedbackText.disabled = false;
                 ratingOptions.forEach(opt => opt.classList.remove('disabled'));
-                
-                alert('Failed to submit feedback. Please try again.');
             }
         });
-
+ 
         // Optional: Prevent form resubmission on page refresh
         window.addEventListener('beforeunload', function(e) {
             if (!isSubmitted && (selectedRating || feedbackText.value.trim())) {
