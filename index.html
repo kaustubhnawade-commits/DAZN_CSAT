@@ -321,10 +321,10 @@
                     console.log('Feedback submitted successfully:', feedbackData);
                 } else {
                     const errorText = await response.text();
-                    throw new Error('Failed to submit feedback: ' + errorText);
+                    console.log('Failed to submit feedback: ' + errorText);
                 }
             } catch (error) {
-                console.error('Error submitting feedback:', error);
+                console.log('Error submitting feedback:', error);
                 
                 // Re-enable form on error
                 isSubmitted = false;
