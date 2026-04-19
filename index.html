@@ -1,348 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Feedback Form</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback</title>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 8px;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
+body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
+    background:#eef1f5;
+    padding:10px;
+}
 
-        .header {
-            background-color: #3d3d3d;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+.container{
+    max-width:400px;
+    margin:auto;
+    background:#f3f4f6;
+    border-radius:16px;
+    padding:14px;
+}
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #cccccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
+.card{
+    background:#fff;
+    border-radius:14px;
+    padding:16px;
+}
 
-        .header-text h2 {
-            font-size: 16px;
-            color: #ffd700;
-            margin-bottom: 2px;
-        }
+h1{
+    font-size:18px;
+    font-weight:700;
+    color:#333;
+}
 
-        .header-text p {
-            font-size: 13px;
-            color: #e0e0e0;
-        }
+.subtext{
+    font-size:14px;
+    color:#666;
+    margin-top:4px;
+    margin-bottom:12px;
+}
 
-        .content {
-            padding: 8px 12px;
-        }
+.rating-options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
 
-        h1 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 2px;
-            color: #333;
-        }
+.rating-option{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    border:2px solid #dcdcdc;
+    border-radius:12px;
+    padding:12px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:500;
+    background:#fff;
+}
 
-        .description {
-            font-size: 11px;
-            color: #666;
-            margin-bottom: 5px;
-        }
+.rating-option.selected{
+    background:#2d73c5;
+    color:#fff;
+    border-color:#2d73c5;
+}
 
-        .rating-options {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            margin-bottom: 7px;
-        }
+.rating-option:not(.selected){
+    border-color:#2d73c5;
+}
 
-        .rating-option {
-            display: flex;
-            align-items: center;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 6px 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background-color: white;
-        }
+.emoji{font-size:20px}
 
-        .rating-option:hover:not(.disabled) {
-            border-color: #1976d2;
-            background-color: #f8f9fa;
-        }
+label{
+    font-size:16px;
+    font-weight:600;
+    margin-top:14px;
+    display:block;
+    color:#333;
+}
 
-        .rating-option.selected {
-            border-color: #1976d2;
-            background-color: #1976d2;
-            color: white;
-        }
+textarea{
+    width:100%;
+    height:60px;
+    border-radius:10px;
+    border:2px solid #2d73c5;
+    padding:10px;
+    font-size:14px;
+    margin-top:6px;
+    resize:none;
+}
 
-        .rating-option.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+.submit-btn{
+    width:100%;
+    margin-top:14px;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#2d73c5;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
 
-        .emoji {
-            font-size: 20px;
-            margin-right: 10px;
-            min-width: 25px;
-            text-align: center;
-        }
+.submit-btn:disabled{
+    background:#aaa;
+}
 
-        .rating-label {
-            font-size: 13px;
-            font-weight: 500;
-        }
+.success-message{
+    display:none;
+    margin-top:10px;
+    background:#4caf50;
+    color:#fff;
+    padding:8px;
+    border-radius:8px;
+    text-align:center;
+}
 
-        .feedback-section {
-            margin-bottom: 5px;
-        }
+.success-message.show{display:block}
 
-        .feedback-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-            display: block;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 40px;
-            max-height: 40px;
-            padding: 6px 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 13px;
-            resize: none;
-            transition: border-color 0.2s;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: #1976d2;
-        }
-
-        textarea:disabled {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 8px;
-            background-color: #1976d2;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .submit-btn:hover:not(:disabled) {
-            background-color: #1565c0;
-        }
-
-        .submit-btn:disabled {
-            background-color: #bdbdbd;
-            cursor: not-allowed;
-        }
-
-        .success-message {
-            display: none;
-            background-color: #4caf50;
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            margin-top: 10px;
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .timestamp {
-            text-align: center;
-            color: #999;
-            font-size: 12px;
-            margin-top: 15px;
-            padding-bottom: 10px;
-        }
-    </style>
+input[type="radio"]{display:none}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="content">
-            <h1>Share your feedback with us</h1>
-            <p class="description">We would love your feedback on our service</p>
 
-            <div class="rating-options">
-                <div class="rating-option" data-rating="good">
-                    <span class="emoji">😊</span>
-                    <span class="rating-label">Good</span>
-                </div>
-                <div class="rating-option" data-rating="ok">
-                    <span class="emoji">😐</span>
-                    <span class="rating-label">Ok</span>
-                </div>
-                <div class="rating-option" data-rating="poor">
-                    <span class="emoji">😞</span>
-                    <span class="rating-label">Poor</span>
-                </div>
-            </div>
+<div class="container">
+<div class="card">
 
-            <div class="feedback-section">
-                <label class="feedback-label" for="feedbackText">What could we have done better?</label>
-                <textarea id="feedbackText" placeholder=""></textarea>
-            </div>
+<form id="feedbackForm">
 
-            <button class="submit-btn" id="submitBtn">Submit feedback</button>
+<h1>Share your feedback with us</h1>
+<p class="subtext">We would love your feedback on our service</p>
 
-            <div class="success-message" id="successMessage">
-                Feedback submitted successfully!
-            </div>
-        </div>
-    </div>
+<div class="rating-options">
 
-    <script>
-        // Configuration - Yellow.ai API endpoint
-        const API_ENDPOINT = 'https://r5.cloud.yellow.ai/integrations/sendevent/sendFeedbackToBot/x1750679463696';
-        const API_AUTH_TOKEN = 'wfsN7V7wYBNEfRdepa_74SN6HNTMdt8i4VFh8X1n';
+<label class="rating-option">
+<input type="radio" name="rating" value="good">
+<span class="emoji">😊</span> Good
+</label>
 
-        // State management
-        let selectedRating = null;
-        let isSubmitted = false;
+<label class="rating-option">
+<input type="radio" name="rating" value="ok">
+<span class="emoji">😐</span> Ok
+</label>
 
-        // DOM elements
-        const ratingOptions = document.querySelectorAll('.rating-option');
-        const feedbackText = document.getElementById('feedbackText');
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
+<label class="rating-option">
+<input type="radio" name="rating" value="poor">
+<span class="emoji">😞</span> Poor
+</label>
 
-        // Helper function to get URL parameters
-        function getUrlParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+</div>
 
-        // Rating selection handler
-        ratingOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                if (isSubmitted) return;
+<label>What could we have done better?</label>
+<textarea name="comment"></textarea>
 
-                // Remove selected class from all options
-                ratingOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                // Add selected class to clicked option
-                this.classList.add('selected');
-                
-                // Store selected rating
-                selectedRating = this.dataset.rating;
-            });
-        });
+<button type="submit" class="submit-btn" id="submitBtn">
+Submit feedback
+</button>
 
-        // Submit handler
-        submitBtn.addEventListener('click', async function() {
-            if (isSubmitted) return;
+<div class="success-message" id="successMessage">
+Submitted
+</div>
 
-            // Validate that a rating is selected — silently do nothing if not
-            if (!selectedRating) {
-                console.warn('Submit attempted without a rating selected.');
-                return;
-            }
+</form>
 
-            // Get dynamic values from URL parameters or use defaults
-            const sender = getUrlParameter('sender') || 'anonymous';
-            const userLanguage = getUrlParameter('userLanguage') || 'en';
-            const source = getUrlParameter('source') || 'feedback_form';
+</div>
+</div>
 
-            // Prepare data to send to Yellow.ai API
-            const feedbackData = {
-                sender: sender,
-                data: {
-                    userLanguage: userLanguage,
-                    rating: selectedRating,
-                    comment: feedbackText.value.trim()
-                }
-            };
+<script>
+let isSubmitted = false;
 
-            try {
-                // Disable form elements
-                isSubmitted = true;
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Submitting...';
-                feedbackText.disabled = true;
-                ratingOptions.forEach(opt => opt.classList.add('disabled'));
+const form = document.getElementById('feedbackForm');
+const options = document.querySelectorAll('.rating-option');
+const submitBtn = document.getElementById('submitBtn');
+const successMessage = document.getElementById('successMessage');
 
-                // Send data to Yellow.ai endpoint
-                const response = await fetch(API_ENDPOINT + '?source=' + encodeURIComponent(source), {
-                    method: 'POST',
-                    headers: {
-                        'x-api-key': API_AUTH_TOKEN,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(feedbackData)
-                });
+options.forEach(option=>{
+    const input = option.querySelector('input');
 
-                if (response.ok) {
-                    // Show success message
-                    successMessage.classList.add('show');
-                    submitBtn.textContent = 'Submitted';
-                    console.log('Feedback submitted successfully:', feedbackData);
-                } else {
-                    const errorText = await response.text();
-                    throw new Error('Failed to submit feedback: ' + errorText);
-                }
-            } catch (error) {
-                console.error('Error submitting feedback:', error);
-                
-                // Re-enable form on error
-                isSubmitted = false;
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit feedback';
-                feedbackText.disabled = false;
-                ratingOptions.forEach(opt => opt.classList.remove('disabled'));
-            }
-        });
+    option.addEventListener('click', ()=>{
+        if(isSubmitted) return;
 
-        // Optional: Prevent form resubmission on page refresh
-        window.addEventListener('beforeunload', function(e) {
-            if (!isSubmitted && (selectedRating || feedbackText.value.trim())) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-    </script>
+        options.forEach(o=>o.classList.remove('selected'));
+        option.classList.add('selected');
+        input.checked = true;
+    });
+});
+
+form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if(isSubmitted) return;
+    const sender = getUrlParameter('sender') || 'anonymous';
+    const formData = new FormData(form);
+    const rating = formData.get('rating');
+    const comment = (formData.get('comment') || '').trim();
+
+    if(!rating) return;
+
+    isSubmitted = true;
+
+    submitBtn.disabled = true;
+    options.forEach(o=>o.style.pointerEvents = "none");
+
+    window.parent.postMessage(
+        JSON.stringify({
+            event_code: "sendFeedbackToBot",
+            data: { rating, comment,sender }
+        }),
+        "*"
+    );
+
+    successMessage.classList.add('show');
+
+    setTimeout(()=>{
+        window.parent.postMessage(
+            JSON.stringify({ event_code: "close_webview" }),
+            "*"
+        );
+    },800);
+});
+</script>
+
 </body>
 </html>
